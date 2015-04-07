@@ -96,3 +96,8 @@ $sprite: sprite-map("sprites/*.png", $layout: "horizontal");
         }
     }
 }
+
+label.has-pretty-child {
+    line-height: 30px;
+    vertical-align: top;
+}

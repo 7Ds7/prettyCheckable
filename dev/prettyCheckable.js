@@ -14,10 +14,11 @@
             label: '',
             labelPosition: 'right',
             customClass: '',
-            color: 'blue'
+            color: 'blue',
+            keepLabel: false
         };
 
-    var addCheckableEvents = function (element) {
+    var addCheckableEvents = function (element, keepL) {
 
         if (window.ko) {
 
@@ -48,11 +49,23 @@
 
         }
 
+
+        if (keepL == true){
+             $('label[for=' + element.find('input').attr('id') + ']').on('touchstart click', function(e){
+               e.stopPropagation();
+                e.preventDefault();
+                element.find('a:first').click();
+             });
+
+        }
+
         element.find('a:first, label').on('touchstart click', function(e){
 
             e.preventDefault();
+            e.stopPropagation();
 
-            var clickedParent = $(this).closest('.clearfix'),
+
+            var clickedParent = $(this).closest('.has-pretty-child'),
                 input = clickedParent.find('input'),
                 fakeCheckable = clickedParent.find('a:first');
 
@@ -125,6 +138,8 @@
 
             var classType = el.data('type') !== undefined ? el.data('type') : el.attr('type');
 
+            var keepLabel = el.data('keeplabel') !== undefined ? el.data('keeplabel') : this.options.keepLabel;
+
             var label = null,
                 elLabelId = el.attr('id');
 
@@ -132,12 +147,15 @@
 
                 var elLabel = $('label[for=' + elLabelId + ']');
 
-                if (elLabel.length > 0) {
+                if (keepLabel == false) {
 
-                    label = elLabel.text();
+                    if (elLabel.length > 0) {
 
-                    elLabel.remove();
+                        label = elLabel.text();
 
+                        elLabel.remove();
+
+                    }
                 }
 
             }
@@ -168,17 +186,16 @@
             if (labelPosition === 'labelright') {
 
                 dom.push('<a href="#" class="' + isChecked + ' ' + disabled + '"></a>');
-                dom.push('<label for="' + el.attr('id') + '">' + label + '</label>');
+                if (keepLabel== false) dom.push('<label for="' + el.attr('id') + '">' + label + '</label>');
 
             } else {
-
-                dom.push('<label for="' + el.attr('id') + '">' + label + '</label>');
+                if (keepLabel == false) dom.push('<label for="' + el.attr('id') + '">' + label + '</label>');
                 dom.push('<a href="#" class="' + isChecked + ' ' + disabled + '"></a>');
 
             }
 
             el.parent().append(dom.join('\n'));
-            addCheckableEvents(el.parent());
+            addCheckableEvents(el.parent(), keepLabel );
 
         },
 
@@ -223,21 +240,30 @@
                 label = null,
                 elLabelId = el.attr('id');
 
-            if (elLabelId !== undefined) {
+             $('label[for=' + elLabelId + ']').off('touchstart click');
+
+             if (elLabelId !== undefined) {
 
                 var elLabel = $('label[for=' + elLabelId + ']');
 
-                if (elLabel.length > 0) {
+                                if (el.closest('label').length < 1) {
+                  if (elLabel.length > 0) {
+                      elLabel.insertBefore(el.parent());
+                  }
 
-                    elLabel.insertBefore(el.parent());
-
-                }
+                  el.parent().remove();
+                  clonedEl.removeAttr('style').insertAfter(elLabel);
+                } else {
+                 el.closest('label').removeClass('has-pretty-child')
+                 el.closest('.prettycheckbox').remove();
+                                 elLabel.append(clonedEl.removeAttr('style'));
+               }
 
             }
 
-            clonedEl.removeAttr('style').insertAfter(elLabel);
 
-            el.parent().remove();
+
+
 
         }
 
