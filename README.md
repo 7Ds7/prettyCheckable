@@ -114,6 +114,18 @@ ps.: If you're wondering why I set a capital letter in front of each file, that'
         <p>This will add a class you want to the wrapping div surrounding the input, created by the plugin.</p>
       </td>
     </tr>
+    <tr>
+      <td>
+        <strong>keepLabel</strong>
+      </td>
+      <td>
+        boolean<br>
+        <em>true, false(default)</em>
+      </td>
+      <td>
+        <p>This will keep the current user defined label</p>
+      </td>
+    </tr>
   </tbody>
 </table>
 
@@ -162,6 +174,18 @@ ps.: If you're wondering why I set a capital letter in front of each file, that'
       </td>
       <td>
         <p>This will add a class you want to the wrapping div surrounding the input, created by the plugin.</p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>keepLabel</strong>
+      </td>
+      <td>
+        boolean<br>
+        <em>true, false(default)</em>
+      </td>
+      <td>
+        <p>This will keep the current user defined label</p>
       </td>
     </tr>
   </tbody>
